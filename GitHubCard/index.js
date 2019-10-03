@@ -1,7 +1,23 @@
+//const axios = require('axios');
 /* Step 1: using axios, send a GET request to the following URL 
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
 */
+const cardContainer = document.querySelector(".cards")
+let followersArray = []
+followersArray = ["Joshua-Edgerton" , "Sara-DLC", "briworkman", "jregner20", "easyas123l1", "AasaChristian"]
+
+followersArray.forEach(follower =>
+  axios.get(`https://api.github.com/users/${follower}`)
+  .then(response => {
+    const newCard = cardCreator(response.data);
+    cardContainer.appendChild(newCard);
+    console.log(response)
+  })
+  .catch(error => {
+    console.log("Data was not returned", error);
+  })
+  );
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -9,11 +25,9 @@
 
    Skip to Step 3.
 */
-
 /* Step 4: Pass the data received from Github into your function, 
            create a new component and add it to the DOM as a child of .cards
 */
-
 /* Step 5: Now that you have your own card getting added to the DOM, either 
           follow this link in your browser https://api.github.com/users/<Your github name>/followers 
           , manually find some other users' github handles, or use the list found 
@@ -24,11 +38,51 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
-
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
+*/
+function cardCreator(card1){
+  //Class Elements
+  const divCard = document.createElement("div")
+  const img1 = document.createElement("img")
+  const divCardInfo = document.createElement("div")
+  const h3Name = document.createElement("h3")
+  const pUsername = document.createElement("p")
+  const pLocation = document.createElement("p")
+  const pProfile = document.createElement("a")
+  const pFollowers = document.createElement("p")
+  const pFollowing = document.createElement("p")
+  const pBio = document.createElement("p")
+  //Class Structure
+  divCard.appendChild(img1)
+  divCard.appendChild(divCardInfo)
+  divCardInfo.appendChild(h3Name)
+  divCardInfo.appendChild(pUsername)
+  divCardInfo.appendChild(pLocation)
+  divCardInfo.appendChild(pProfile)
+  divCardInfo.appendChild(pFollowers)
+  divCardInfo.appendChild(pFollowing)
+  divCardInfo.appendChild(pBio)
+  //Class Names / Source
+  divCard.classList.add("card")
+  img1.src = card1.avatar_url
+  divCardInfo.classList.add("card-info")
+  h3Name.classList.add("name")
+  pUsername.classList.add("username")
+  pProfile.setAttribute("href", card1.html_url)
+  //Text Content
+  h3Name.textContent = card1.login
+  pUsername.textContent = ""
+  pLocation.textContent = card1.location
+  pProfile.textContent = card1.html_url
+  pFollowers.textContent = `Followers: ${card1.followers}`
+  pFollowing.textContent = `Following: ${card1.following}`
+  pBio.textContent = card1.bio
 
+  return divCard
+}
+
+/*
 <div class="card">
   <img src={image url of user} />
   <div class="card-info">
@@ -43,9 +97,7 @@ const followersArray = [];
     <p>Bio: {users bio}</p>
   </div>
 </div>
-
 */
-
 /* List of LS Instructors Github username's: 
   tetondan
   dustinmyers
